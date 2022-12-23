@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static crispy_forms_tags %}
+
+{% block title %}Todos{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="mb-2">
+        <div class="row align-items-center">
+          <div class="col-md-6 col-12 hstack gap-3">
+            <div class="me-2 d-xl-none">
+              <a class="text-muted" data-bs-toggle="collapse" href="#collapseSidebarLeft" role="button" aria-expanded="false" aria-controls="collapseSidebarLeft">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </div>
+            <div>
+              <h5 class="h3"># todo-list</h5>
+            </div>
+            <div class="">
+              <span class="badge bg-opacity-30 bg-success text-success">Add new item</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% for todo in object_list %}
+        <div class="d-flex">
+            <div class="me-3">
+                <input type="checkbox"
+                        id="todo-{{ todo.id }}"
+                        name="todo-{{ todo.id }}"
+                        value="{{ todo.title }}"
+                        {% if todo.status %} checked {% endif %}>
+            </div>
+            <div>
+                <p class="text-sm text-muted">
+                    {{ todo.title }}
+                </p>
+            </div>
+        </div>
+
+    {% empty %}
+        <p>No todos yet.</p>
+    {% endfor %}
+</div>
+{% endblock content %}

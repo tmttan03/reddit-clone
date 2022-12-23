@@ -15,6 +15,7 @@
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Your stuff: Third-party CSS libraries go here -->
+    <link href="https://unpkg.com/@webpixels/css/dist/index.css" rel="stylesheet">
 
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
@@ -35,67 +36,103 @@
   </head>
 
   <body>
-
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light px-0 py-3">
+        <div class="container-xl">
+          <!-- Navbar toggle -->
+          <button class="navbar-toggler ms-n2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'home' %}">Reddit Clone</a>
+          <!-- Logo -->
+          <a class="navbar-brand" href="">
+            <img src="{% static 'images/favicons/favicon.ico' %}" class="h-8" alt="..."> 
+            <span class="mr-2">Reddit Clone</span>
+          </a>
+          <!-- Avatar -->
+          {% if request.user.is_authenticated %}
+            <div class="dropdown order order-lg-3 ms-lg-4">
+              <a class="d-block" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="avatar avatar-sm bg-warning rounded-circle text-white">
+                  <img alt="..." src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80">
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <div class="dropdown-header">
+                  <h6 class="text-overflow m-0">Welcome!</h6>
+                </div>
+                <a href="{% url 'users:detail' request.user.username  %}" class="dropdown-item">
+                  <i class="ni ni-single-02"></i>
+                  <span>Profile</span>
+                </a>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'account_logout' %}" class="dropdown-item">
+                  <i class="ni ni-user-run"></i>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- Collapse -->
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <!-- Nav -->
+            <div class="navbar-nav">
+
+              <a class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                href="{% url 'home' %}">
+                Home
+              </a>
+
+              <a class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                href="{% url 'about' %}">
+                About
+              </a>
+
               {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
-                </li>
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-                </li>
-              {% else %}
+                <a class="nav-item nav-link {% if request.resolver_match.url_name == 'todo-list' %}active{% endif %}" 
+                   href="{% url 'todos:todo-list' %}">Todo List
+                </a>
+              {% endif %}
+            </div>
+            <!-- Right navigation -->
+
+            {% if not request.user.is_authenticated %}
+              <div class="navbar-nav align-items-lg-center d-none d-lg-flex ms-lg-auto">
+
                 {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-              </li>
-              {% endif %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-                </li>
-              {% endif %}
-            </ul>
+                  <a href="{% url 'account_signup' %}" class="nav-link nav-link-icon px-3 position-relative">
+                    {% translate "Sign Up" %}
+                  </a>
+                {% endif %}
+
+                <a href="{% url 'account_login' %}" class="nav-link nav-link-icon px-3 position-relative">
+                  {% translate "Sign In" %}
+                </a>
+
+              </div>
+            {% endif %}
           </div>
         </div>
       </nav>
 
+      <main class="py-6">
+        <div class="container-xl">
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-dismissible fade show text-sm {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          {% block content %}
+            <p>Use this document as a way to quick start any new project.</p>
+          {% endblock content %}
+        </div
+      </main>
     </div>
-
-    <div class="container">
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
 
     {% block modal %}{% endblock modal %}
 
