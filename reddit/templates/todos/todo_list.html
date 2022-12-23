@@ -17,12 +17,9 @@
             <div>
               <h5 class="h3"># todo-list</h5>
             </div>
-            <div class="">
-              <span class="badge bg-opacity-30 bg-success text-success">Add new item</span>
-            </div>
           </div>
         </div>
-      </div>
+    </div>
     {% for todo in object_list %}
         <div class="d-flex">
             <div class="me-3">
@@ -42,5 +39,23 @@
     {% empty %}
         <p>No todos yet.</p>
     {% endfor %}
+
+
+    <div class="mt-2">
+        <form>
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12 hstack gap-3">
+                    <div>
+                        <input type="text" class="form-control form-control-sm" id="name" placeholder="list item ...">
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            Add Item
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock content %}
