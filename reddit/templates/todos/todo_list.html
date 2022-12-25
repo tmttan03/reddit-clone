@@ -20,37 +20,46 @@
           </div>
         </div>
     </div>
-    {% for todo in object_list %}
-        <div class="d-flex">
-            <div class="me-3">
+
+    <div id="todo-list-body">
+        {% for todo in object_list %}
+            <p>
                 <input type="checkbox"
                         id="todo-{{ todo.id }}"
                         name="todo-{{ todo.id }}"
                         value="{{ todo.title }}"
-                        {% if todo.status %} checked {% endif %}>
-            </div>
-            <div>
-                <p class="text-sm text-muted">
+                        {% if todo.status %} checked {% endif %}
+                        onchange="updateStatus(event, {{ todo.id }}, '{{ todo.title }}')">
                     {{ todo.title }}
-                </p>
-            </div>
-        </div>
-
-    {% empty %}
-        <p>No todos yet.</p>
-    {% endfor %}
-
+            </p>
+        {% empty %}
+            <p>No todos yet.</p>
+        {% endfor %}
+    </div>
 
     <div class="mt-2">
-        <form>
+        <form method="POST" name="listForm" id="listForm">
+            {% csrf_token %}
             <div class="row align-items-center">
                 <div class="col-md-6 col-12 hstack gap-3">
                     <div>
-                        <input type="text" class="form-control form-control-sm" id="name" placeholder="list item ...">
+                        <input type="text"
+                                class="form-control form-control-sm"
+                                id="title"
+                                name="title"
+                                placeholder="list item ...">
                     </div>
                     <div>
-                        <a href="#" class="btn btn-outline-primary btn-sm">
+                        <a href="#" type="submit"
+                            class="btn btn-outline-primary btn-sm"
+                            onclick="addItem(event)">
                             Add Item
+                        </a>
+
+                        <a href="#" type="submit"
+                            class="btn btn-outline-primary btn-sm"
+                            onclick="resetForm(event)">
+                            Reset
                         </a>
                     </div>
                 </div>
@@ -59,3 +68,8 @@
     </div>
 </div>
 {% endblock content %}
+
+
+{% block inline_javascript %}
+    <script defer src="{% static 'js/todo.js' %}"></script>
+{% endblock inline_javascript %}
