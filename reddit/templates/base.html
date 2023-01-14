@@ -96,6 +96,10 @@
                    href="{% url 'todos:todo-list' %}">Todo List
                 </a>
               {% endif %}
+
+              <a class="nav-item nav-link {% if request.resolver_match.url_name == 'translate-view' %}active{% endif %}" 
+                href="{% url 'todos:translate-view' %}">Translate
+              </a>
             </div>
             <!-- Right navigation -->
 
