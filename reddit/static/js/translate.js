@@ -23,6 +23,16 @@ function simplifyTranslate(event){
         },
         error: function (error) {
             console.log(error)
+            var error_message = '<div class="alert bg-danger text-white d-flex align-items-center rounded-pill px-2 py-1" role="alert">' +
+            '<div class="text-sm">'+
+            '<span class="font-bold">Error!</span> Check your inputs or contact support for more assistance.</span>'+
+            '</div></div>';
+
+            $('#error-message').append(error_message);
+
+            setTimeout(function() {
+                $('#error-message').empty();
+            }, 3000);
         }
     });
 }
