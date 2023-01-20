@@ -7,6 +7,11 @@ hiredis==2.1.0  # https://github.com/redis/hiredis-py
 celery==5.2.7  # pyup: < 6.0  # https://github.com/celery/celery
 django-celery-beat==2.4.0  # https://github.com/celery/django-celery-beat
 openai==0.26.1
+google-api-core==2.11.0
+google-auth==2.16.0
+google-cloud-core==2.3.2
+google-cloud-translate==3.10.0
+googleapis-common-protos==1.58.0
 
 # Django
 # ------------------------------------------------------------------------------
