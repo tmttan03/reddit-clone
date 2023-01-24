@@ -85,6 +85,7 @@ class TranslateViewSet(ViewSet):
             for translation in trans_response.translations:
                 translated.append(translation.translated_text)
             return Response({'simplified': simplified_texts, 'translated': translated}, status=200)
-        except:
+        except Exception as e:
+            print(e)
             return Response({'message': 'Invalid input'}, status=400)
 
